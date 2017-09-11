@@ -2,6 +2,7 @@ package io.github.yuemenglong.http
 
 
 import java.io.File
+import java.net.URLEncoder
 import java.util
 
 import io.github.yuemenglong.json.JSON
