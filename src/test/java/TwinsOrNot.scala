@@ -1,18 +1,15 @@
-package io.github.yuemenglong.http
-
 import java.io.File
 
+import io.github.yuemenglong.http.HttpClient
 import io.github.yuemenglong.json.JSON
 
 /**
   * Created by <yuemenglong@126.com> on 2017/9/11.
   */
-
-object Main {
-
+object TwinsOrNot {
   def uploadFile(path: String, lr: String): String = {
     val client = new HttpClient
-    val file = Main.getClass.getClassLoader.getResource(path).getFile
+    val file = TwinsOrNot.getClass.getClassLoader.getResource(path).getFile
     val url = s"https://www.twinsornot.net/Home/AnalyzeOneImage?isTest=False&fileid=$lr"
     val res = client.httpForm(url, Map(s"processedImg$lr" -> new File(file)))
     println(res)
@@ -38,4 +35,3 @@ object Main {
     println(score)
   }
 }
-
