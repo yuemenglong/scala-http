@@ -2,16 +2,14 @@ package io.github.yuemenglong.http
 
 
 import java.io.File
-import java.net.URLEncoder
 import java.util
 
-import io.github.yuemenglong.json.JSON
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpEntityEnclosingRequestBase, HttpGet, HttpPost}
 import org.apache.http.entity.ContentType
 import org.apache.http.entity.mime.MultipartEntityBuilder
 import org.apache.http.entity.mime.content.{FileBody, StringBody}
-import org.apache.http.impl.client.HttpClients
+import org.apache.http.impl.client.{CloseableHttpClient, HttpClientBuilder}
 import org.apache.http.message.BasicNameValuePair
 
 import scala.util.matching.Regex
@@ -41,6 +39,10 @@ class HttpClient {
     cookies += (key -> value)
   }
 
+  def setHeaders(headers: Map[String, String]): Unit = {
+    this.headers = headers
+  }
+
   def setCookieString(cookieString: String): Unit = {
     cookieString.trim.split(";").foreach {
       case colonPattern(key, value) => cookies += (key.trim -> value.trim)
@@ -60,12 +62,6 @@ class HttpClient {
       case colonPattern("Cookie", value) => setCookieString(value)
       case colonPattern(key, value) => headers += (key.trim -> value.trim)
     }
-  }
-
-  def httpGet(url: String): HttpResponse = {
-    val request = new HttpGet(url)
-    val response = HttpClients.createDefault().execute(request)
-    generateResponse(response)
   }
 
   def generateResponse(response: org.apache.http.HttpResponse): HttpResponse = {
@@ -94,6 +90,14 @@ class HttpClient {
     }
   }
 
+  def createClient(): CloseableHttpClient = HttpClientBuilder.create.useSystemProperties.build
+
+  def httpGet(url: String): HttpResponse = {
+    val request = new HttpGet(url)
+    val response = createClient().execute(request)
+    generateResponse(response)
+  }
+
   def httpForm(url: String, data: Map[String, Any]): HttpResponse = {
     val request = new HttpPost(url)
     commonSetHeader(request)
@@ -114,7 +118,7 @@ class HttpClient {
       }
       request.setEntity(multiBuilder.build())
     }
-    val response = HttpClients.createDefault().execute(request)
+    val response = createClient().execute(request)
     generateResponse(response)
   }
 }
