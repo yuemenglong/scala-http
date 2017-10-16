@@ -7,11 +7,20 @@ import io.github.yuemenglong.json.JSON
   * Created by <yuemenglong@126.com> on 2017/10/16.
   */
 
+//(3,4,85.2)
+//(3,5,86.097)
+//(3,6,86.243)
+//(4,5,75.451)
+//(4,6,77.188)
+//(5,6,86.138)
+//(3,7,42.078)
+//(8,7,83.747)
+//(6,7,44.265)
 
 object FacePlusPlus {
 
   def detect(): Unit = {
-    val path = Thread.currentThread().getContextClassLoader.getResource("test4.jpg").getFile
+    val path = Thread.currentThread().getContextClassLoader.getResource("test8.jpg").getFile
     println(path)
 
     val client = new HttpClient
@@ -39,7 +48,7 @@ object FacePlusPlus {
   }
 
   def main(args: Array[String]): Unit = {
-    detect()
+        detect()
     //    3.to(5).foreach(i => {
     //      (i + 1).to(6).foreach(j => {
     //        val path1 = Thread.currentThread().getContextClassLoader.getResource(s"test$i.jpg").getFile
@@ -47,6 +56,11 @@ object FacePlusPlus {
     //        println(i, j, compare(path1, path2))
     //      })
     //    })
+//    val i = 6
+//    val j = 7
+//    val path1 = Thread.currentThread().getContextClassLoader.getResource(s"test$i.jpg").getFile
+//    val path2 = Thread.currentThread().getContextClassLoader.getResource(s"test$j.jpg").getFile
+//    println(i, j, compare(path1, path2))
   }
 
 }

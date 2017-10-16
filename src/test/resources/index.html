@@ -10,28 +10,39 @@
             position: absolute;
         }
 
-        #container {
+        .container {
             position: relative;
         }
 
-        #container img {
-            position: absolute;
+        .container img {
+            position: relative;
         }
     </style>
 </head>
 <body>
-<div id="container">
-    <img src="test4.jpg"/>
-</div>
-<script src="detect-res4.js"></script>
+<!--<div class="container" id="c6">-->
+<!--<img src="test6.jpg"/>-->
+<!--</div>-->
+<script src="detect-res.js"></script>
 <script>
-    _.values(detectRes.faces[0].landmark).forEach(({x, y}) => {
-            let mark = $("<div class='mark'></div>");
-            mark.css("left", x);
-            mark.css("top", y);
-            $("#container").append(mark)
-        }
-    )
+    function showImage(idx) {
+        let container = $(`<div class="container"><img src="test${idx}.jpg"/></div>`)
+        _.values(window[`detectRes${idx}`].faces[0].landmark).forEach(({x, y}) => {
+                let mark = $("<div class='mark'></div>");
+                mark.css("left", x);
+                mark.css("top", y);
+                container.append(mark)
+            }
+        );
+        $(document.body).append(container)
+    }
+
+    showImage(3)
+    showImage(4)
+    showImage(5)
+    showImage(6)
+    showImage(7)
+    showImage(8)
 </script>
 </body>
 </html>
