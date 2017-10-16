@@ -1,0 +1,37 @@
+<html>
+<head>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/lodash.js/4.17.4/lodash.min.js"></script>
+    <style>
+        .mark {
+            width: 2px;
+            height: 2px;
+            background-color: red;
+            position: absolute;
+        }
+
+        #container {
+            position: relative;
+        }
+
+        #container img {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <img src="test4.jpg"/>
+</div>
+<script src="detect-res4.js"></script>
+<script>
+    _.values(detectRes.faces[0].landmark).forEach(({x, y}) => {
+            let mark = $("<div class='mark'></div>");
+            mark.css("left", x);
+            mark.css("top", y);
+            $("#container").append(mark)
+        }
+    )
+</script>
+</body>
+</html>
