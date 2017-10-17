@@ -26,19 +26,23 @@
 <!--<div class="container" id="c6">-->
 <!--<img src="test6.jpg"/>-->
 <!--</div>-->
-<script src="detect-res.js"></script>
+<!--<script src="detect-res.js"></script>-->
 <script>
     function showInfo({path, res, score}, idx) {
         let container = $(`<div class="container"><img src="${path}"/></div>`);
-        _.values(res.faces[0].landmark).forEach(({x, y}) => {
-                let mark = $("<div class='mark'></div>");
-                mark.css("left", x);
-                mark.css("top", y);
-                container.append(mark)
-            }
-        );
+        res.faces.forEach(face => {
+            _.values(face.landmark).forEach(({x, y}) => {
+                    let mark = $("<div class='mark'></div>");
+                    mark.css("left", x);
+                    mark.css("top", y);
+                    container.append(mark)
+                }
+            );
+        });
         $(document.body).append(container)
     }
+
+    window.imgInfo.map(showInfo)
 
     //    function showImage(idx) {
     //        let container = $(`<div class="container"><img src="test${idx}.jpg"/></div>`)

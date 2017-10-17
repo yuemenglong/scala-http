@@ -2,6 +2,8 @@ import java.io.{File, FileOutputStream}
 import java.nio.file.Paths
 import java.util.Date
 
+import scala.io.Source
+
 /**
   * Created by <yuemenglong@126.com> on 2017/10/17.
   */
@@ -36,11 +38,30 @@ object Watcher {
     println("Finish Round", new Date())
   }
 
+  def generateHtml(files: Array[File]): Unit = {
+    val arr = files.map(f => {
+      val path = "file:///" + f.getAbsolutePath.replaceAll("\\\\", "/")
+      val res = Source.fromFile(f.getAbsolutePath.replace(".jpg", ".json"))
+        .getLines().mkString("")
+      val score = f.getName.split("_")(0)
+      s"""{"path":"$path","res":$res,"score":$score}"""
+    }).mkString(",")
+    val info = s"[$arr]"
+    val tpl = Source.fromInputStream(Thread.currentThread().getContextClassLoader
+      .getResourceAsStream("template.html")).getLines().mkString("\n")
+    val html = tpl.replace("//IMG_INFO", info)
+    val fs = new FileOutputStream("index.html")
+    fs.write(html.getBytes())
+    fs.close()
+  }
+
+
   def main(args: Array[String]): Unit = {
-    val dir = new File("D:/pic-watch")
-    while (true) {
-      watch(dir)
-      Thread.sleep(1000)
-    }
+    generateHtml(Array(new File("D:/pic-watch/91.705_timg (8).jpg")))
+    //    val dir = new File("D:/pic-watch")
+    //    while (true) {
+    //      watch(dir)
+    //      Thread.sleep(1000)
+    //    }
   }
 }
