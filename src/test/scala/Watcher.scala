@@ -14,7 +14,7 @@ object Watcher {
   }
 
   def watch(dir: File): Unit = {
-    val sample = Thread.currentThread().getContextClassLoader.getResource("sample/sample.jpg").getFile
+    val sample = Thread.currentThread().getContextClassLoader.getResource("sample/yangmi.jpg").getFile
     val jpgSet = getFileSet(dir, name => name.endsWith(".jpg")).map(_.replace(".jpg", ""))
     val jsonSet = getFileSet(dir, name => name.endsWith(".json")).map(_.replace(".json", ""))
     val working = jpgSet -- jsonSet
@@ -57,7 +57,11 @@ object Watcher {
 
 
   def main(args: Array[String]): Unit = {
-    generateHtml(Array(new File("D:/pic-watch/91.705_timg (8).jpg")))
+    generateHtml(Array(
+      new File("D:/pic-watch/73.126_3eeec3182a.jpg"),
+      new File("D:/pic-watch/97.389_yangmi.jpg"),
+    ))
+    watch(new File("D:/pic-watch"))
     //    val dir = new File("D:/pic-watch")
     //    while (true) {
     //      watch(dir)
