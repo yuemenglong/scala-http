@@ -19,10 +19,7 @@ import io.github.yuemenglong.json.JSON
 
 object FacePlusPlus {
 
-  def detect(): Unit = {
-    val path = Thread.currentThread().getContextClassLoader.getResource("test8.jpg").getFile
-    println(path)
-
+  def detect(path: String): String = {
     val client = new HttpClient
     val formData = Map[String, Any](
       "api_key" -> "uqngbdsbwX9CsbqPeObfwzzlaUJpPDJC",
@@ -32,7 +29,7 @@ object FacePlusPlus {
       "return_attributes" -> "gender,age,smiling,headpose,facequality,blur,eyestatus,emotion,ethnicity,beauty,mouthstatus,eyegaze,skinstatus",
     )
     val res = client.httpForm("https://api-cn.faceplusplus.com/facepp/v3/detect", formData)
-    println(res.getBody)
+    res.getBody
   }
 
   def compare(path1: String, path2: String): Double = {
@@ -48,7 +45,6 @@ object FacePlusPlus {
   }
 
   def main(args: Array[String]): Unit = {
-        detect()
     //    3.to(5).foreach(i => {
     //      (i + 1).to(6).foreach(j => {
     //        val path1 = Thread.currentThread().getContextClassLoader.getResource(s"test$i.jpg").getFile
@@ -56,11 +52,11 @@ object FacePlusPlus {
     //        println(i, j, compare(path1, path2))
     //      })
     //    })
-//    val i = 6
-//    val j = 7
-//    val path1 = Thread.currentThread().getContextClassLoader.getResource(s"test$i.jpg").getFile
-//    val path2 = Thread.currentThread().getContextClassLoader.getResource(s"test$j.jpg").getFile
-//    println(i, j, compare(path1, path2))
+    //    val i = 6
+    //    val j = 7
+    //    val path1 = Thread.currentThread().getContextClassLoader.getResource(s"test$i.jpg").getFile
+    //    val path2 = Thread.currentThread().getContextClassLoader.getResource(s"test$j.jpg").getFile
+    //    println(i, j, compare(path1, path2))
   }
 
 }

@@ -1,19 +1,8 @@
-/**
-  * Created by <yuemenglong@126.com> on 2017/10/9.
-  */
+import java.io.{BufferedReader, File, InputStreamReader}
 
-import java.io.BufferedReader
-import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
-import org.apache.http.HttpEntity
-import org.apache.http.HttpResponse
-import org.apache.http.client.ClientProtocolException
-import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.mime.MultipartEntity
-import org.apache.http.entity.mime.content.FileBody
-import org.apache.http.entity.mime.content.StringBody
+import org.apache.http.entity.mime.content.{FileBody, StringBody}
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.util.EntityUtils
 
@@ -54,8 +43,6 @@ object LinkFace {
     httpclient.getConnectionManager.shutdown()
   }
 
-  @throws[ClientProtocolException]
-  @throws[IOException]
   def main(args: Array[String]): Unit = {
     HttpClientPost()
   }
