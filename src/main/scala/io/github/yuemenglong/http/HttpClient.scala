@@ -30,7 +30,8 @@ class HttpResponse(status: Int, data: Array[Byte]) {
 
 class HttpClient {
 
-  val colonPattern: Regex = "(.+):(.+)".r
+  val cookiePattern: Regex = "^(.+)=(.*)$".r
+  val colonPattern: Regex = "(.+):(.*)".r
 
   var cookies: Map[String, String] = Map()
   var headers: Map[String, String] = Map()
@@ -44,13 +45,13 @@ class HttpClient {
   }
 
   def setCookieString(cookieString: String): Unit = {
-    cookieString.trim.split(";").foreach {
-      case colonPattern(key, value) => cookies += (key.trim -> value.trim)
+    cookieString.trim.split(";").map(_.trim).foreach {
+      case cookiePattern(key, value) => cookies += (key.trim -> value.trim)
     }
   }
 
   def getCookieString: String = {
-    cookies.map { case (name, value) => s"$name:$value" }.mkString(";")
+    cookies.map { case (name, value) => s"$name=$value" }.mkString(";")
   }
 
   def setHeader(key: String, value: String): Unit = {
@@ -122,3 +123,4 @@ class HttpClient {
     generateResponse(response)
   }
 }
+
