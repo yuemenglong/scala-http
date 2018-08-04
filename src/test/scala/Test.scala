@@ -104,6 +104,7 @@ object Test {
   }
 
   def main(args: Array[String]): Unit = {
+    val cookie = "SUV=1712312255354743; vjuids=-69d27717.160f48d85e7.0.0019abdc8a4f; gidinf=x099980109ee0d7c33ae3e458000d078cd4448b5a44b; beans_mz_userid=T1fVe08TKg37; vjlast=1515931404.1520602056.12; mut=zz.go.smuid; _smuid=ALRTtZe2bXDcTduYsUFUI1; _smuid_type=2; IPLOC=CN4100; beans_dmp=%7B%22admaster%22%3A1532783425%2C%22shunfei%22%3A1532783425%2C%22reachmax%22%3A1532783425%2C%22lingji%22%3A1532783425%2C%22yoyi%22%3A1532783425%2C%22ipinyou%22%3A1532783425%2C%22ipinyou_admaster%22%3A1532783425%2C%22miaozhen%22%3A1532783425%2C%22diantong%22%3A1532783425%2C%22huayang%22%3A1532783425%7D; t=1532783423591"
     val client = new HttpClient
     val start = "20000101"
     val end = "20180101"
@@ -112,7 +113,7 @@ object Test {
     val stock = "zs_000001"
     //    val url = "http://q.stock.sohu.com/hisHq?code=zs_000001&start=20000504&end=20151215&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp&r=0.8391495715053367&0.9677250558488026"
     val url = s"http://q.stock.sohu.com/hisHq?code=$stock&start=$start&end=$end&stat=1&order=D&period=d&rt=json&r=0.8391495715053367&0.9677250558488026"
-    client.setCookieString("vjuids=4a08c4925.158f270a575.0.4889c22306691; sohutag=8HsmeSc5NSwmcyc5NywmYjc5NSwmYSc5NSwmZjc5NCwmZyc5NCwmbjc5NCwmaSc5NCwmdyc5NCwmaCc5NCwmYyc5NCwmZSc5NCwmbSc5NCwmdCc5NH0; vjlast=1481536218.1495169557.11; SUV=1612101609570991; BIZ_MyLBS=cn_600641%2C%u4E07%u4E1A%u4F01%u4E1A%7C; IPLOC=CN4101")
+    client.setCookieString(cookie)
     val body = client.httpGet(url).getBody
     val jo = JSON.parse(body)
     val bars = jo.asArr().getObj(0).getArr("hq").array.map(_.asArr().array).map(arr => {
@@ -127,50 +128,51 @@ object Test {
       bar.high = arr(6).asStr().toDouble
       bar
     }).sortBy(_.date)
+    println(bars.length)
 
-    val cycle = 260
-    bars.zipWithIndex.foreach { case (bar, i) =>
-      i match {
-        case 0 => bar.ma = bar.open
-        case n if n >= cycle => bar.ma = (bars(i - 1).ma * cycle - bars(i - cycle).open + bar.open) / cycle.toDouble
-        case n if 0 < n && n < cycle => bar.ma = (bars(i - 1).ma * (n - 1) + bar.open) / n
-      }
-    }
-    //    bars.map(JSON.stringify(_)).foreach(println)
-
-    //noinspection SimplifyBooleanMatch
-    val base = 1000
-    val arr = monthBars(bars.filter(b => b.date.after(new Date(110, 0, 1)))).foldLeft(ArrayBuffer[Record]())((arr, bar) => {
-      val ratio = fn11(bar)
-      val price = bar.open
-      var record = new Record
-      arr.lastOption match {
-        case Some(last) =>
-          record.preMoney = last.postMoney + base * 2
-          record.preStockVol = last.postStockVol
-          record.preInput = last.postInput
-        case None =>
-          record.preMoney = base * 2
-          record.preStockVol = 0
-          record.preInput = 0
-      }
-      record.date = bar.date
-      record.price = price
-      record.ratio = ratio
-      val input = base * ratio
-      val buy = input / price
-      record.postInput = record.preInput + input
-      record.postMoney = record.preMoney - input
-      record.postStockVol = record.preStockVol + buy
-      //      record.postInput = record.preInput + input
-      //      val currentValue = record.preValue + input
-      //      record.postMoney = currentValue * (1 - ratio)
-      //      record.postStockVol = currentValue * ratio / price
-      arr += record
-      arr
-    })
-
-    //    println("时间 买入 价格 均价 持仓 市值 成本 盈利 盈利百分点")
-    arr.foreach(println)
+//    val cycle = 260
+//    bars.zipWithIndex.foreach { case (bar, i) =>
+//      i match {
+//        case 0 => bar.ma = bar.open
+//        case n if n >= cycle => bar.ma = (bars(i - 1).ma * cycle - bars(i - cycle).open + bar.open) / cycle.toDouble
+//        case n if 0 < n && n < cycle => bar.ma = (bars(i - 1).ma * (n - 1) + bar.open) / n
+//      }
+//    }
+//    //    bars.map(JSON.stringify(_)).foreach(println)
+//
+//    //noinspection SimplifyBooleanMatch
+//    val base = 1000
+//    val arr = monthBars(bars.filter(b => b.date.after(new Date(110, 0, 1)))).foldLeft(ArrayBuffer[Record]())((arr, bar) => {
+//      val ratio = fn11(bar)
+//      val price = bar.open
+//      var record = new Record
+//      arr.lastOption match {
+//        case Some(last) =>
+//          record.preMoney = last.postMoney + base * 2
+//          record.preStockVol = last.postStockVol
+//          record.preInput = last.postInput
+//        case None =>
+//          record.preMoney = base * 2
+//          record.preStockVol = 0
+//          record.preInput = 0
+//      }
+//      record.date = bar.date
+//      record.price = price
+//      record.ratio = ratio
+//      val input = base * ratio
+//      val buy = input / price
+//      record.postInput = record.preInput + input
+//      record.postMoney = record.preMoney - input
+//      record.postStockVol = record.preStockVol + buy
+//      //      record.postInput = record.preInput + input
+//      //      val currentValue = record.preValue + input
+//      //      record.postMoney = currentValue * (1 - ratio)
+//      //      record.postStockVol = currentValue * ratio / price
+//      arr += record
+//      arr
+//    })
+//
+//    //    println("时间 买入 价格 均价 持仓 市值 成本 盈利 盈利百分点")
+//    arr.foreach(println)
   }
 }
