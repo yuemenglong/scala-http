@@ -54,7 +54,7 @@ object Limits {
       high - (high - low) / level * i
     })
     limits = lines.zip(fixed).toArray
-        limits.foreach(println)
+    limits.foreach(println)
   }
 
   def cross(prev: Bar, bar: Bar): (Double, Double) =
@@ -90,29 +90,29 @@ object Test {
   }
 
   def main(args: Array[String]): Unit = {
-    Limits.init(3000, 1600, 16, 1.4)
+    Limits.init(3200, 2600, 8, 1.4)
 
-    val bars = Store.fetch(start = "20090901")
-    val prevBars = bars.drop(1) ++ Array(bars.last)
-    var curLine = 0.0
-    //    val sb = bars.takeRight(750).sortBy(_.close)
-    //    print(sb(sb.length / 2).close)
-    bars.zip(prevBars).foreach { case (prev, bar) =>
-      Limits.cross(prev, bar) match {
-        case null =>
-        case (line, ratio) => {
-          if (curLine != line) {
-            val vol = RecordContext.input * ratio / bar.close
-            RecordContext.buy(bar, vol)
-            //            println(bar.date, line, bar.close, ratio * 100,
-            //              RecordContext.money, RecordContext.total(bar.close), RecordContext.avg)
-            curLine = line
-          }
-        }
-      }
-      println(bar.date, bar.close,
-        RecordContext.money, RecordContext.total(bar.close),
-        RecordContext.avg, RecordContext.profit(bar.close))
-    }
+//    val bars = Store.fetch(start = "20090901")
+//    val prevBars = bars.drop(1) ++ Array(bars.last)
+//    var curLine = 0.0
+//    //    val sb = bars.takeRight(750).sortBy(_.close)
+//    //    print(sb(sb.length / 2).close)
+//    bars.zip(prevBars).foreach { case (prev, bar) =>
+//      Limits.cross(prev, bar) match {
+//        case null =>
+//        case (line, ratio) => {
+//          if (curLine != line) {
+//            val vol = RecordContext.input * ratio / bar.close
+//            RecordContext.buy(bar, vol)
+//            //            println(bar.date, line, bar.close, ratio * 100,
+//            //              RecordContext.money, RecordContext.total(bar.close), RecordContext.avg)
+//            curLine = line
+//          }
+//        }
+//      }
+//      println(bar.date, bar.close,
+//        RecordContext.money, RecordContext.total(bar.close),
+//        RecordContext.avg, RecordContext.profit(bar.close))
+//    }
   }
 }
