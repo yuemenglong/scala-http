@@ -5,7 +5,7 @@
     <!-- <!– The Basics –> -->
     <groupId>io.github.yuemenglong</groupId>
     <artifactId>scala-http</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>scala-http</name>
     <description>A light weight http lib written by scala</description>
