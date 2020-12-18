@@ -4,9 +4,11 @@ package io.github.yuemenglong.http
 import java.io.File
 import java.util
 
+import io.github.yuemenglong.json.JSON
 import org.apache.http.client.entity.UrlEncodedFormEntity
+import org.apache.http.client.methods.RequestBuilder.post
 import org.apache.http.client.methods.{HttpEntityEnclosingRequestBase, HttpGet, HttpPost}
-import org.apache.http.entity.ContentType
+import org.apache.http.entity.{ContentType, StringEntity}
 import org.apache.http.entity.mime.MultipartEntityBuilder
 import org.apache.http.entity.mime.content.{FileBody, StringBody}
 import org.apache.http.impl.client.{CloseableHttpClient, HttpClientBuilder}
@@ -95,6 +97,17 @@ class HttpClient {
 
   def httpGet(url: String): HttpResponse = {
     val request = new HttpGet(url)
+    val response = createClient().execute(request)
+    generateResponse(response)
+  }
+
+  def httpJson(url: String, data: Object): HttpResponse = {
+    val request = new HttpPost(url)
+    commonSetHeader(request)
+    val entity = new StringEntity(JSON.stringify(data))
+    entity.setContentEncoding("UTF-8")
+    entity.setContentType("application/json") //发送json数据需要设置contentType
+    post.setEntity(entity)
     val response = createClient().execute(request)
     generateResponse(response)
   }
