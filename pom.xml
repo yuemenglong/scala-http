@@ -66,11 +66,6 @@
             <version>4.5.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.github.yuemenglong/scala-json -->
-        <dependency>
-            <groupId>io.github.yuemenglong</groupId>
-            <artifactId>scala-json</artifactId>
-            <version>1.1.0</version>
-        </dependency>
     </dependencies>
     <build>
         <pluginManagement>

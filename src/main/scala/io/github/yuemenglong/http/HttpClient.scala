@@ -4,7 +4,6 @@ package io.github.yuemenglong.http
 import java.io.File
 import java.util
 
-import io.github.yuemenglong.json.JSON
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.RequestBuilder.post
 import org.apache.http.client.methods.{HttpEntityEnclosingRequestBase, HttpGet, HttpPost}
@@ -101,12 +100,23 @@ class HttpClient {
     generateResponse(response)
   }
 
-  def httpJson(url: String, data: Object): HttpResponse = {
+  def httpJson(url: String, data: String): HttpResponse = {
     val request = new HttpPost(url)
     commonSetHeader(request)
-    val entity = new StringEntity(JSON.stringify(data))
+    val entity = new StringEntity(data)
     entity.setContentEncoding("UTF-8")
-    entity.setContentType("application/json") //发送json数据需要设置contentType
+    entity.setContentType(ContentType.APPLICATION_JSON.toString)
+    post.setEntity(entity)
+    val response = createClient().execute(request)
+    generateResponse(response)
+  }
+
+  def httpPost(url: String, data: String, contentType: ContentType): HttpResponse = {
+    val request = new HttpPost(url)
+    commonSetHeader(request)
+    val entity = new StringEntity(data)
+    entity.setContentEncoding("UTF-8")
+    entity.setContentType(contentType.toString)
     post.setEntity(entity)
     val response = createClient().execute(request)
     generateResponse(response)
